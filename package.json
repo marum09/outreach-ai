@@ -1,0 +1,30 @@
+{
+  "name": "outreach-ai",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI cold email + LinkedIn outreach writer for one specific industry",
+  "scripts": {
+    "dev": "next dev -H 0.0.0.0 -p 3000",
+    "build": "next build",
+    "start": "next start -H 0.0.0.0 -p 3000",
+    "lint": "next lint",
+    "test": "tsx --test test/unit.test.ts && node --test test/integration.test.mjs",
+    "test:unit": "tsx --test test/unit.test.ts test/page.test.tsx",
+    "test:integration": "node --test test/integration.test.mjs"
+  },
+  "dependencies": {
+    "next": "^16.3.5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.17.12",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tsx": "^4.23.13",
+    "typescript": "5.7.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

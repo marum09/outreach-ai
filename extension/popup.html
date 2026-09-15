@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  body {
+    width: 300px;
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: #0a0a0b;
+    color: #f4f4f5;
+  }
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border-bottom: 1px solid #26262b;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .dot { width: 9px; height: 9px; border-radius: 3px; background: #d6ff3f; }
+  .body { padding: 14px; }
+  .hint { font-size: 12px; color: #9b9ba3; margin: 0 0 12px; line-height: 1.5; }
+  .found {
+    background: #17171a;
+    border: 1px solid #26262b;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .found b { color: #d6ff3f; }
+  button {
+    width: 100%;
+    background: #d6ff3f;
+    color: #101010;
+    border: none;
+    border-radius: 9px;
+    padding: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    margin-bottom: 8px;
+    font-family: inherit;
+  }
+  button.ghost {
+    background: transparent;
+    border: 1px solid #26262b;
+    color: #f4f4f5;
+    font-weight: 600;
+  }
+  .tiny { font-size: 10.5px; color: #9b9ba3; margin: 4px 0 0; }
+</style>
+</head>
+<body>
+  <div class="head"><span class="dot"></span> RealtyReach</div>
+  <div class="body">
+    <p class="hint">Write a 3-email follow-up sequence + LinkedIn message for any lead.</p>
+    <div class="found" id="found" hidden></div>
+    <button id="prefill" hidden>Write sequence for this profile</button>
+    <button id="open" class="ghost">Open RealtyReach</button>
+    <p class="tiny">v0.1.0 — point APP_URL in popup.js at your deployed app.</p>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

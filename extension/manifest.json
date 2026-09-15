@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "RealtyReach — AI Follow-up for Real Estate Agents",
+  "version": "0.1.0",
+  "description": "Turn any lead into a 3-email follow-up sequence plus a LinkedIn message. Built for real estate agents.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Open RealtyReach"
+  },
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "permissions": ["activeTab", "scripting"]
+}
