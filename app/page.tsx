@@ -10,6 +10,7 @@ import {
   TONE_LABEL,
   Tone,
 } from "@/lib/types";
+import { isLifetimeCode, UNLOCK_STORAGE_KEY } from "@/lib/unlock";
 
 /* ---------------------------------------------------------------- */
 /*  Copy. Change these to your niche before you launch.             */
@@ -66,11 +67,13 @@ export default function Home() {
   const [used, setUsed] = useState<number>(0);
   const [copied, setCopied] = useState<string | null>(null);
   const [mock, setMock] = useState(false);
+  const [unlocked, setUnlocked] = useState(false);
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw !== null) setUsed(Number(raw) || 0);
+      if (localStorage.getItem(UNLOCK_STORAGE_KEY) === "1") setUnlocked(true);
     } catch {
       /* private mode — leave the default */
     }
@@ -89,7 +92,7 @@ export default function Home() {
     }
   }, []);
 
-  const locked = used >= FREE_GENERATIONS;
+  const locked = !unlocked && used >= FREE_GENERATIONS;
 
   const set = (key: keyof GenerateInput) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -116,12 +119,14 @@ export default function Home() {
       setMock(Boolean(json.mock));
       setTab("email-0");
 
-      const next = used + 1;
-      setUsed(next);
-      try {
-        localStorage.setItem(STORAGE_KEY, String(next));
-      } catch {
-        /* non-fatal */
+      if (!unlocked) {
+        const next = used + 1;
+        setUsed(next);
+        try {
+          localStorage.setItem(STORAGE_KEY, String(next));
+        } catch {
+          /* non-fatal */
+        }
       }
     } catch (err: any) {
       setError(err?.message ?? "Something went wrong.");
@@ -181,7 +186,9 @@ export default function Home() {
             {HEADCOUNT_COPY.name}
           </div>
           <div className="pill">
-            {Math.max(FREE_GENERATIONS - used, 0)} of {FREE_GENERATIONS} free generations left
+            {unlocked
+              ? "Lifetime access ✓"
+              : `${Math.max(FREE_GENERATIONS - used, 0)} of ${FREE_GENERATIONS} free generations left`}
           </div>
         </div>
       </header>
@@ -542,6 +549,22 @@ function IcebreakerView({
 }
 
 function Paywall({ onClose }: { onClose: null }) {
+  const [code, setCode] = useState("");
+  const [msg, setMsg] = useState<string | null>(null);
+
+  function tryUnlock() {
+    if (isLifetimeCode(code)) {
+      try {
+        localStorage.setItem(UNLOCK_STORAGE_KEY, "1");
+      } catch {
+        /* non-fatal */
+      }
+      window.location.reload();
+      return;
+    }
+    setMsg("That code isn't valid. Copy it exactly from your checkout email.");
+  }
+
   return (
     <div className="paywall" role="dialog" aria-modal="true">
       <div className="paywall-card">
@@ -562,9 +585,23 @@ function Paywall({ onClose }: { onClose: null }) {
         <a className="link-btn" href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer">
           Get lifetime access
         </a>
-        <div className="tiny">
-          Checkout not connected yet — see README, step 4 (Paddle / Polar, both $0/month).
+        <div className="tiny">Bought a lifetime code? Paste it below to unlock.</div>
+
+        <div className="section-label" style={{ marginTop: 14 }}>
+          Have a lifetime code?
         </div>
+        <div className="row">
+          <input
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            placeholder="RR49-XXXX-XXXX-X"
+            aria-label="Lifetime code"
+          />
+          <button className="btn btn-ghost" type="button" onClick={tryUnlock}>
+            Unlock
+          </button>
+        </div>
+        {msg && <p className="err">{msg}</p>}
       </div>
     </div>
   );
